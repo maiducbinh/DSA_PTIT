@@ -8,13 +8,14 @@ int main()
     cin >> t;
     while(t--)
     {
-        int n;
-        cin >> n;
+        int n , x;
+        cin >> n >> x;
         int a[n];
         for(int &i : a) cin >> i;
-        int ans = 0;
-        for(int i = 0 ; i < n - 1 ; i++)
-            if(a[i] > a[i + 1]) ans = i + 1;
-        cout << ans << endl;
+        for(int i = 0 ; i < n ; i++)
+            if(a[i] == x)
+            {
+                cout << i + 1 << endl;
+            }
     }
 }

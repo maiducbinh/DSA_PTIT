@@ -12,9 +12,9 @@ int main()
         cin >> n;
         int a[n];
         for(int &i : a) cin >> i;
-        int ans = 0;
-        for(int i = 0 ; i < n - 1 ; i++)
-            if(a[i] > a[i + 1]) ans = i + 1;
-        cout << ans << endl;
+        sort(a , a + n);
+        if(a[0] == a[1]) cout << -1;
+        else cout << a[0] << " " << a[1];
+        cout << endl;
     }
 }
