@@ -55,17 +55,52 @@ template<typename T> using matrix = vector<vector<T> >;
 template<typename T> using rubik = vector<vector<vector<T> > >;// rubik<int> a: instead of vector<vector<vector<int> > > a;
 
 // Functions
+const int N = 1e6 + 5;
+int n, a[N];
 
+struct node
+{
+    int val;
+    node *left, *right;
+    node(int x)
+    {
+        val = x;
+        left = right = NULL;
+    }
+};
+node* built(int l, int r)
+{
+    if(l > r) return NULL;
+    int mid = (l + r) / 2;
+    node *t = new node(a[mid]);
+    t->left = built(l, mid - 1);
+    t->right = built(mid + 1, r);
+    return t;
+}
+int cnt = 0;
+void Count(node *root)
+{
+    if(root)
+    {
+        if(root->left || root->right)
+        {
+            if(root->left) Count(root->left);
+            if(root->right) Count(root->right);
+        }
+        else cnt++;
+    }
+}
 int main()
 {
     faster();
     tc()
     {
-        int n;
         cin >> n;
-        vi a(n);
-        cin >> a;
-        sort(all(a));
-        cout << a[(n - 1) >> 1] << endl;
+        F(i, 0, n) cin >> a[i];
+        sort(a, a + n);
+        node *root = built(0, n - 1);
+        cnt = 0;
+        Count(root);
+        cout << cnt << endl;
     }
 }

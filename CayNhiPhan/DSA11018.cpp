@@ -55,17 +55,47 @@ template<typename T> using matrix = vector<vector<T> >;
 template<typename T> using rubik = vector<vector<vector<T> > >;// rubik<int> a: instead of vector<vector<vector<int> > > a;
 
 // Functions
-
+int n;
+struct node
+{
+    int val;
+    node *left, *right;
+    node(int x)
+    {
+        val = x;
+        left = right = NULL;
+    }
+};
+void built(node *&root, int x)
+{
+    if(root == NULL) 
+    {
+        root = new node(x);
+        return;
+    }
+    if(root->val > x) built(root->left, x);
+    else built(root->right, x);
+}
+void print(node *root)
+{
+    cout << root->val << " ";
+    if(root->left != NULL) print(root->left);
+    if(root->right != NULL) print(root->right);
+}
 int main()
 {
     faster();
     tc()
     {
-        int n;
         cin >> n;
-        vi a(n);
-        cin >> a;
-        sort(all(a));
-        cout << a[(n - 1) >> 1] << endl;
+        node *root = NULL;
+        for(int i = 1; i <= n; ++i)
+        {
+            int x;
+            cin >> x;
+            built(root, x);
+        }
+        print(root);
+        cout << endl;
     }
 }

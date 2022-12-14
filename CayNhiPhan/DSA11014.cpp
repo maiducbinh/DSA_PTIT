@@ -40,7 +40,7 @@ using namespace std;
 #define FD(i, a, b) for(int i = a; i > b; --i)
 #define faster() ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
 const int mod = 1e9 + 7;
-const int maxn = 1e5 + 5;
+const int maxn = 1e6 + 5;
 
 // Some useful std functions
 template<typename T> T pmax(T &a) {return max_element(a.begin(), a.end()) - a.begin();}
@@ -55,7 +55,45 @@ template<typename T> using matrix = vector<vector<T> >;
 template<typename T> using rubik = vector<vector<vector<T> > >;// rubik<int> a: instead of vector<vector<vector<int> > > a;
 
 // Functions
-
+struct node
+{
+    int val;
+    node *left, *right;
+    node(int x)
+    {
+        val = x;
+        left = right = NULL;
+    }
+};
+void makeRoot(node *root, int u, int v, char c)
+{
+    if(c == 'L') root->left = new node(v);
+    else root->right = new node(v);
+}
+void built(node *root, int u, int v, char c)
+{
+    if(root == NULL) return;
+    if(root->val == u) makeRoot(root, u, v, c);
+    else
+    {
+        built(root->left, u, v, c);
+        built(root->right, u, v, c);
+    }
+}
+bool check(node *root)
+{
+    return (root->left == NULL && root->right == NULL);
+}
+ll sum;
+void duyet(node *root)
+{
+    if(root)
+    {
+        if(root->right && check(root->right)) sum += root->right->val;
+        if(root->right && !check(root->right)) duyet(root->right);
+        if(root->left && !check(root->left)) duyet(root->left);
+    }
+}
 int main()
 {
     faster();
@@ -63,9 +101,20 @@ int main()
     {
         int n;
         cin >> n;
-        vi a(n);
-        cin >> a;
-        sort(all(a));
-        cout << a[(n - 1) >> 1] << endl;
+        node *root = NULL;
+        while(n--)
+        {
+            int u, v; char c;
+            cin >> u >> v >> c;
+            if(root == NULL) 
+            {
+                root = new node(u);
+                makeRoot(root, u, v, c);
+            }
+            else built(root, u, v, c);
+        }
+        sum = 0;
+        duyet(root);
+        cout << sum << endl;
     }
 }

@@ -55,17 +55,48 @@ template<typename T> using matrix = vector<vector<T> >;
 template<typename T> using rubik = vector<vector<vector<T> > >;// rubik<int> a: instead of vector<vector<vector<int> > > a;
 
 // Functions
+const int N = 1e6 + 5;
+int n, a[N];
+struct node
+{
+    int val;
+    node *left, *right;
+    node(int x)
+    {
+        val = x;
+        left = right = NULL;
+    }
+};
 
+node* buildTree(int l, int r)
+{
+    if(l > r) return NULL;
+    int mid = (l + r) / 2;
+    node *t = new node(a[mid]);
+    t->left = buildTree(l, mid - 1);
+    t->right = buildTree(mid + 1, r);
+    return t;
+}
+
+void print(node *nut)
+{
+    if(nut != NULL)
+    {
+        if(nut->left != NULL) print(nut->left);
+        if(nut->right != NULL) print(nut->right);
+        cout << nut->val << " ";
+    }
+}
 int main()
 {
     faster();
     tc()
     {
-        int n;
         cin >> n;
-        vi a(n);
-        cin >> a;
-        sort(all(a));
-        cout << a[(n - 1) >> 1] << endl;
+        for(int i = 0; i < n; i++) cin >> a[i];
+        sort(a, a + n);
+        node* T = buildTree(0, n - 1);
+        print(T);
+        cout << endl;
     }
 }

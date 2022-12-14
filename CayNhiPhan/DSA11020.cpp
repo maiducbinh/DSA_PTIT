@@ -63,9 +63,9 @@ int main()
     {
         int n;
         cin >> n;
-        vi a(n);
-        cin >> a;
-        sort(all(a));
-        cout << a[(n - 1) >> 1] << endl;
+        vi v(n);
+        cin >> v;
+        set<int> se(all(v));
+        cout << (se.Sz == n && is_sorted(all(v))) << endl;
     }
 }

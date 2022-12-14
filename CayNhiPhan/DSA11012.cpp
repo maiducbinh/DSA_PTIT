@@ -56,16 +56,74 @@ template<typename T> using rubik = vector<vector<vector<T> > >;// rubik<int> a: 
 
 // Functions
 
+struct node
+{
+    int val;
+    node *left, *right;
+    node(int x)
+    {
+        val = x;
+        left = right = NULL;
+    }
+};
+void makeRoot(node *root, int u, int v, char c)
+{
+    if(c == 'L') root->left = new node(v);
+    else root->right = new node(v);
+}
+void insertNode(node *root, int u, int v, char c)
+{
+    if(root == NULL) return;
+    if(root->val == u) makeRoot(root, u, v, c);
+    else
+    {
+        insertNode(root->left, u, v, c);
+        insertNode(root->right, u, v, c);
+    }
+}
+int ok;
+void check(node *a, node *b)
+{
+    if(!ok || a == NULL || b == NULL) return;
+    if(a->val != b->val) return ok = 0, void();
+    if((a->left == NULL && b->left != NULL) || (a->right == NULL && b->right != NULL))
+        return ok = 0, void();
+    check(a->left, b->left);
+    check(a->right, b->right);
+}
 int main()
 {
     faster();
     tc()
     {
-        int n;
+        int n, m;
         cin >> n;
-        vi a(n);
-        cin >> a;
-        sort(all(a));
-        cout << a[(n - 1) >> 1] << endl;
-    }
+        node *root1 = NULL, *root2 = NULL;
+        for(int i = 0; i < n; i++)
+        {
+            int u, v; char c;
+            cin >> u >> v >> c;
+            if(root1 == NULL)
+            {
+                root1 = new node(u);
+                makeRoot(root1, u, v, c);
+            }
+            else insertNode(root1, u, v, c);
+        }
+        cin >> m;
+        for(int i = 0; i < m; i++)
+        {
+            int u, v; char c;
+            cin >> u >> v >> c;
+            if(root2 == NULL)
+            {
+                root2 = new node(u);
+                makeRoot(root2, u, v, c);
+            }
+            else insertNode(root2, u, v, c);
+        }
+        ok = 1;
+        check(root1, root2);
+        cout << ok << endl;
+   }
 }
